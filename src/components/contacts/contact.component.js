@@ -1,7 +1,9 @@
-import React,{useState} from "react";
+import React,{useState, useContext} from "react";
+import { ContactContext } from "../services/contacts/contacts.context";
 
-export const Contact = ({contact, onDelete}) => {
+export const Contact = ({contact}) => {
   const [showInfo, setShowInfo] = useState(false);
+  const {onDelete} = useContext(ContactContext)
 
   return (
     <div className='card card-body mb-3'>
