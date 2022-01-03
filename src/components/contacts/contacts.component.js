@@ -1,15 +1,23 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Contact from './contact.component'
 
 const con = [
-  {name: "George Kofi", phone: "4447778989"},
-  {name: "John Doe", phone: "3334445555"},
-  {name: "Ichigo Tesla", phone: "4447778989"}]
+  {id: 1, name: "George Kofi", phone: "4447778989"},
+  {id: 2, name: "John Doe", phone: "3334445555"},
+  {id: 3, name: "Ichigo Tesla", phone: "4447778989"}]
 
+  
 const Contacts = () => {
+  const [contacts, setContacts] = useState(con);
+  
+  const onDelete = (id) => {
+    const newContacts = contacts.filter(con => con.id !== id);
+    setContacts(newContacts);
+  }
+
   return (
     <div>
-      {con.map(con => (<Contact name={con.name} phone={con.phone}/>))}
+      {contacts.map(contacts => (<Contact contact={contacts} onDelete={onDelete}/>))}
     </div>
   )
 }
