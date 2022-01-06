@@ -1,30 +1,56 @@
-import React,{createContext,useState} from "react";
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const ContactContext = createContext();
 
-const con = [
-  {id: 1, name: "George Kofi", phone: "4447778989"},
-  {id: 2, name: "John Doe", phone: "3334445555"},
-  {id: 3, name: "Ichigo Tesla", phone: "4447778989"}
-]
+const ContextProvider = ({ children }) => {
+  const [contacts, setContacts] = useState([]);
 
-const ContextProvider = ({children}) => {
-  const [contacts, setContacts] = useState(con);
+  const GetContacts = () => {
+    axios
+      .get("http://jsonplaceholder.typicode.com/users")
+      .then((res) => setContacts(res.data));
+  };
 
   const onDelete = (id) => {
-    const newContacts = contacts.filter(con => con.id !== id);
-    setContacts(newContacts);
-  }
+    axios
+      .delete(`http://jsonplaceholder.typicode.com/users/${id}`)
+      .then((res) => {
+        const newContacts = contacts.filter((con) => con.id !== id);
+        setContacts(newContacts);
+      });
+  };
 
   const onAdd = (contact) => {
-    setContacts([contact, ...contacts]);
-  }
+    axios
+      .post("http://jsonplaceholder.typicode.com/users", contact)
+      .then((res) => {
+        setContacts([res.data, ...contacts]);
+      });
+  };
+
+  const onUpdate = (id, contact) => {
+    axios
+      .put(`http://jsonplaceholder.typicode.com/users/${id}`, contact)
+      .then(({ data }) => {
+        const Contacts = contacts.map((contact) =>
+          contact.id === data.id ? (contact = data) : contact
+        );
+        console.log(data);
+        console.log(contacts);
+        setContacts(Contacts);
+      });
+  };
+
+  useEffect(() => {
+    GetContacts();
+  }, []);
 
   return (
-    <ContactContext.Provider value={{contacts,onDelete, onAdd}} >
+    <ContactContext.Provider value={{ contacts, onDelete, onAdd, onUpdate }}>
       {children}
     </ContactContext.Provider>
-  )
-}
+  );
+};
 
 export default ContextProvider;
