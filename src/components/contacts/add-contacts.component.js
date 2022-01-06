@@ -1,14 +1,16 @@
 import React, { useState, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
 import classnames from "classnames";
+import { useNavigate } from "react-router-dom";
 import { ContactContext } from "../services/contacts/contacts.context";
 
-const AddContact = () => {
+const AddContact = ({ history }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState({});
 
   const { onAdd } = useContext(ContactContext);
+
+  let navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -24,16 +26,15 @@ const AddContact = () => {
     }
 
     const contact = {
-      id: uuidv4(),
       name: name,
       phone: phone,
     };
-    console.log(contact);
     onAdd(contact);
 
     setName("");
     setPhone("");
     setError({});
+    navigate("/");
   };
 
   return (
