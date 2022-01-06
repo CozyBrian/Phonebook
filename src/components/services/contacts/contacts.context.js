@@ -6,12 +6,14 @@ export const ContactContext = createContext();
 const ContextProvider = ({ children }) => {
   const [contacts, setContacts] = useState([]);
 
+  //Getting Contacts from our backend...but in this case it's a placeholder backend
   const GetContacts = () => {
     axios
       .get("http://jsonplaceholder.typicode.com/users")
       .then((res) => setContacts(res.data));
   };
 
+  //Sending Delete Requests
   const onDelete = (id) => {
     axios
       .delete(`http://jsonplaceholder.typicode.com/users/${id}`)
@@ -21,6 +23,7 @@ const ContextProvider = ({ children }) => {
       });
   };
 
+  //sending Post/Add Requests
   const onAdd = (contact) => {
     axios
       .post("http://jsonplaceholder.typicode.com/users", contact)
@@ -29,6 +32,7 @@ const ContextProvider = ({ children }) => {
       });
   };
 
+  //sending Update Request
   const onUpdate = (id, contact) => {
     axios
       .put(`http://jsonplaceholder.typicode.com/users/${id}`, contact)
